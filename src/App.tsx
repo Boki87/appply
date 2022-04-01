@@ -1,32 +1,17 @@
-import { signInWithGoogle, signMeOut } from "./lib/firebase.js";
-import {signOut} from 'firebase/auth'
-import {useAuthContext} from './context'
+import { Box } from '@chakra-ui/react'
+import AppRoutes from './components/AppRoutes'
+import Auth from './components/Auth'
+import { useAuthContext } from './context'
 
 function App() {
-  const { user } = useAuthContext();
+
+  const { user } = useAuthContext()
+
 
   return (
-    <div>
-      Hello World
-      <button
-        onClick={() => {
-          signInWithGoogle();
-        }}
-      >
-        Google
-      </button>
-      <br />
-   
-      <button
-        onClick={() => {
-          signMeOut();
-        }}
-      >
-        Sign Out
-      </button>
-      <br />
-      <h1>{user ? user.email : "no user"}</h1>
-    </div>
+    <Box w='full' h="full">
+      {!user ? <Auth /> : <AppRoutes />}
+    </Box>
   );
 }
 

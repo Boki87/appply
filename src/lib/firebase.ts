@@ -1,5 +1,5 @@
-import {initializeApp} from 'firebase/app'
-import {getAuth, signOut, GoogleAuthProvider, signInWithPopup} from 'firebase/auth'
+import { initializeApp } from 'firebase/app'
+import { getAuth, signOut, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 
 
 const firebaseConfig = {
@@ -24,10 +24,21 @@ const signMeOut = () => {
 
 const provider = new GoogleAuthProvider()
 
-export const signInWithGoogle = () => signInWithPopup(auth, provider)
+const signInWithGoogle = () => signInWithPopup(auth, provider)
+
+const signIn = async (email: string, password: string) => {
+  return await signInWithEmailAndPassword(auth, email, password)
+}
+
+const signUp = async (email: string, password: string) => {
+  return await createUserWithEmailAndPassword(auth, email, password)
+}
 
 export {
-  signMeOut
+  signMeOut,
+  signIn,
+  signUp,
+  signInWithGoogle
 }
 
 export default app
