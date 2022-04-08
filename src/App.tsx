@@ -2,6 +2,9 @@ import { Box } from '@chakra-ui/react'
 import AppRoutes from './components/AppRoutes'
 import Auth from './components/Auth'
 import { useAuthContext } from './context'
+import NewBoardModal from './components/NewBoardModal'
+
+
 
 function App() {
 
@@ -9,9 +12,10 @@ function App() {
 
 
   return (
-    <Box w='full' h="full">
+    <>
       {!user ? <Auth /> : <AppRoutes />}
-    </Box>
+      <NewBoardModal />
+    </>
   );
 }
 

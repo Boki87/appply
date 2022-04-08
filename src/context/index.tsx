@@ -1,8 +1,13 @@
 import { ReactChild } from 'react'
 import UserContextProvider, { useAuthContext } from './user'
+import BoardContextProvider, {useBoardsContext} from './board'
+import ModalsContextProvider, {useModalsContext} from './modals'
+
 
 export {
-  useAuthContext
+  useAuthContext,
+  useBoardsContext,
+  useModalsContext
 }
 
 
@@ -15,9 +20,13 @@ const Store = ({ children }: StoreProps) => {
 
 
   return (
-    <UserContextProvider>
-      {children}
-    </UserContextProvider>
+      <BoardContextProvider>
+        <UserContextProvider>
+          <ModalsContextProvider>
+          {children}
+          </ModalsContextProvider>
+        </UserContextProvider>
+      </BoardContextProvider>
   )
 }
 
