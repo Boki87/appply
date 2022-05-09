@@ -1,22 +1,30 @@
-import {Box,Stack,Button, Flex, HStack, Text} from '@chakra-ui/react'
+import {Box,Stack,Button, Flex, HStack, Text, Skeleton} from '@chakra-ui/react'
 import {useEffect, useState} from 'react'
 import {useParams} from 'react-router-dom'
 import {getListsForBoard} from '../lib/firebase'
 import { useBoardsContext } from '../context'
 import { BoardType } from '../context/board'
 import BoardList from './BoardList'
-
+import JobModal from './JobModal'
+import {CgList} from 'react-icons/cg'
 
 const Board = () => {
 
     let {id} = useParams()
     const {lists, setLists, boards, createNewList, setActiveBoard, getJobsForBoard} = useBoardsContext()
     const [board, setBoard] = useState<BoardType | null>(null)
-
+    const [loadingLists, setLoadingLists] = useState(true)
 
     async function getListsForBoardHandler() {
-        let listsFromFirebase = await getListsForBoard(id)
-        setLists(listsFromFirebase)
+        setLoadingLists(true)
+        try {
+            let listsFromFirebase = await getListsForBoard(id)
+            setLists(listsFromFirebase)
+            setLoadingLists(false)
+        } catch(err) {
+            console.log(err);
+            setLoadingLists(false)
+        }
     }
 
     function getActiveBoard(id: string | undefined) {
@@ -47,13 +55,24 @@ const Board = () => {
         <Box w="full" flexGrow={1} overflowX="auto">
             <Box h="full">
                 <Flex h="full">
-                  {lists && lists.map((list: any) => <BoardList list={list} key={list.id}/>)}
-                  <Stack minW="300px" h="full" p="15px">
-                    <Button onClick={addNewListHandler}>Add List</Button>
-                  </Stack>
+
+                    {/* Loading state  */}
+                    {loadingLists && [1,2,3,4,5].map((s: number) => <Skeleton key={s} h="100%" minW="280px" mx="10px" my="10px"/>)}
+
+                    {/* Map of all the lists in current board */}
+                    {!loadingLists && lists && lists.map((list: any) => <BoardList list={list} key={list.id}/>)}
+
+                    {/* Add new list button */}
+                    {!loadingLists && <Stack minW="300px" h="full" p="15px">
+                    <Button onClick={addNewListHandler}><CgList /> <Text ml="10px">Add List</Text></Button>
+
+                  </Stack>}
                 </Flex>
             </Box>
         </Box>
+
+
+        <JobModal />
     </Box>)
 }
 

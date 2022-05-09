@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, signOut, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import {getFirestore, doc, addDoc, getDoc, collection, getDocs, deleteDoc, setDoc,query, where} from 'firebase/firestore'
+import {JobType} from '../context/board'
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuMG2qATA7lghIYmeSQ_wwpReeOKL1JqI",
@@ -51,15 +53,15 @@ const signUp = async (email: string, password: string) => {
 function addStarterListsToBoard(boardId: string) {
    //add starter lists to board
    const initialLists = [
-    'wishlist',
-    'applied',
-    'interview',
-    'offer',
-    'rejected'
+    'Wishlist',
+    'Applied',
+    'Interview',
+    'Offer',
+    'Rejected'
   ]
 
   initialLists.forEach(async (list, i) => {
-    await addDocToCollection('lists', {
+    let newList = await addDocToCollection('lists', {
       board_id: boardId,
       name: list,
       order_id: i
@@ -112,8 +114,14 @@ const deleteBoard = async (boardId: string) => {
   const board = await getDoc(boardRef)
   const lists = await getDocs(query(collection(db, 'lists'), where('board_id', '==', boardId)))
 
+  //delete lists for job board
   lists.forEach(async listDoc => {
     await deleteDoc(doc(db, 'lists', listDoc.id))
+    //delete jobs for list
+    const jobs = await getDocs(query(collection(db, 'jobs'), where('list_id', '==', listDoc.id)))
+    jobs.forEach(async jobDoc => {
+      await deleteDoc(doc(db, 'jobs', jobDoc.id))
+    })
   })
 
   await deleteDoc(boardRef)
@@ -165,7 +173,7 @@ const addJob = async ( boardId: string, listId: string, userId: string, orderId:
     user_id: userId,
     name: 'My dream role',
     description: '',
-    company: 'FANG',
+    company: 'FANG ltd',
     deadline: '',
     location: '',
     color: '',
@@ -188,6 +196,30 @@ const getJobsForBoard = async (boardId: string) => {
   return resArr
 }
 
+const deleteJobsInList = async (listId: string) => {
+  const jobs = await getDocs(query(collection(db, 'jobs'), where('list_id', '==', listId)))
+  jobs.forEach(async job => {
+    await deleteDoc(doc(db, 'jobs', job.id))
+  })
+}
+
+
+const fetchJobData = async (jobId: string) => {
+  const job = await getDocFromCollection('jobs', jobId)
+  return job
+}
+
+const updateJob = async (jobId: string, jobObj: any) => {
+  const jobRef = doc(db, 'jobs', jobId)
+  await setDoc(jobRef, jobObj, {merge: true})
+  const jobRes = await getDoc(jobRef)
+  return {id: jobRes.id, ...jobRes.data()}
+}
+
+const deleteJob = async (jobId: string) => {
+  const jobRef = doc(db, 'jobs', jobId)
+  await deleteDoc(jobRef)
+}
 
 export {
   signMeOut,
@@ -207,6 +239,10 @@ export {
   updateListsOrder,
   addJob,
   getJobsForBoard,
+  deleteJobsInList,
+  fetchJobData,
+  updateJob,
+  deleteJob,
   db,
   auth
 }

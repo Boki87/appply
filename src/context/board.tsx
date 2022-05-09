@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect, createContext, FC } from "react";
 import { onAuthStateChanged, User as FirebaseUser  } from "firebase/auth";
 import { createNewList, updateListsOrder } from "../lib/firebase.js";
-import { deleteBoard, deleteList, addJob, getJobsForBoard } from "../lib/firebase.js";
+import { deleteJob, deleteBoard, deleteList, addJob, getJobsForBoard, deleteJobsInList, updateJob } from "../lib/firebase.js";
 import { ListProps } from "@chakra-ui/react";
 
 type BoardsContextType = {
@@ -19,7 +19,10 @@ type BoardsContextType = {
   jobs: JobType[] | [],
   addJob: (boardId: string, userId: string, listId: string) => void,
   setJobs: (jobs: JobType[]) => void,
-  getJobsForBoard: (boardId: string) => void
+  getJobsForBoard: (boardId: string) => void,
+  updateList: (list: ListProps) => void,
+  updateJob: (jobId: string, job: JobType) => void,
+  deleteJob: (jobId: string) => void,
 }
 
 
@@ -44,6 +47,7 @@ export type JobType = {
   list_id: string,
   created_at: number,
   order_id: number,
+  url: string,
 }
 
 const BoardsContext = createContext<BoardsContextType>({ 
@@ -61,7 +65,10 @@ const BoardsContext = createContext<BoardsContextType>({
   setIsLoadingBoards: () => {}, 
   deleteList: () => {}, 
   createNewList: () => {},
-  getJobsForBoard: () => {} 
+  getJobsForBoard: () => {},
+  updateList: () => {},
+  updateJob: () => {},
+  deleteJob: () => {},
 });
 
 export const useBoardsContext = () => useContext(BoardsContext);
@@ -98,6 +105,17 @@ const BoardContextProvider: FC = ({ children }) => {
     }
   }
 
+  const updateList = (list: ListProps) => {
+    const newLists = lists.map((listItem: any) => {
+      if (listItem.id === list.id) {
+        return {...listItem, ...list};
+      }
+      return listItem;
+    });
+    setLists(newLists);
+  }
+
+
   const deleteListHandler = async (id: string) => {
     await deleteList(id)
     let newLists = lists.filter((list: any) => list.id !== id)
@@ -108,7 +126,7 @@ const BoardContextProvider: FC = ({ children }) => {
     })
     await updateListsOrder(newLists)
     setLists(newLists)
-    //TODO: delete jobs in list
+    await deleteJobsInList(id)    
   }
 
   const createNewListHandler = async (boardId: string | undefined) => {
@@ -140,8 +158,28 @@ const BoardContextProvider: FC = ({ children }) => {
       console.log(err);
     }
   }
+
+const updateJobHandler = async (jobId: string, newJob: JobType) => {
+    await updateJob(jobId, newJob)
+    const newJobs = jobs.map((job: JobType) => {
+      if (job.id === jobId) {
+        return newJob;
+      }
+      return job;
+    })
+
+    setJobs(newJobs)
+  }
+
+  const deleteJobHandler = async (jobId: string) => {
+    await deleteJob(jobId)
+    const newJobs = jobs.filter((job: JobType) => job.id !== jobId)
+    setJobs(newJobs)
+  }
+
+
   return (
-    <BoardsContext.Provider value={{ boards,isLoadingBoards, activeBoard, lists, jobs, setBoards: setBoardsHandler, deleteBoard:deleteBoardHandler, setActiveBoard: setActiveBoardHandler, setLists: setListsHandler, setIsLoadingBoards, deleteList:deleteListHandler, createNewList:createNewListHandler, addJob: addJobHandler, setJobs, getJobsForBoard: getJobsForBoardHandler  }}>{children}</BoardsContext.Provider>
+    <BoardsContext.Provider value={{ boards,isLoadingBoards, activeBoard, lists, jobs, setBoards: setBoardsHandler, deleteBoard:deleteBoardHandler, setActiveBoard: setActiveBoardHandler, setLists: setListsHandler, setIsLoadingBoards, deleteList:deleteListHandler, createNewList:createNewListHandler, addJob: addJobHandler, setJobs, getJobsForBoard: getJobsForBoardHandler, updateList, updateJob: updateJobHandler, deleteJob: deleteJobHandler  }}>{children}</BoardsContext.Provider>
   );
 };
 

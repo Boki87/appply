@@ -1,6 +1,9 @@
 import {SyntheticEvent, useRef, useEffect, useState} from 'react'
 import {Button, Stack, Input, Text, HStack, Menu, MenuButton, MenuList, MenuItem, IconButton, Spacer} from '@chakra-ui/react'
 import {BsThreeDotsVertical} from 'react-icons/bs'
+import {HiOutlinePlus} from 'react-icons/hi'
+import {FaRegEdit} from 'react-icons/fa'
+import {MdDeleteForever} from 'react-icons/md'
 import {updateList} from '../lib/firebase'
 import { useBoardsContext, useAuthContext } from '../context'
 import { JobType } from '../context/board'
@@ -10,7 +13,7 @@ const BoardList = ({list}: any) => {
 
     let inputRef = useRef<HTMLInputElement>(null)
     const [listName, setListName ] = useState(list.name)
-    const {activeBoard, deleteList, addJob, jobs} = useBoardsContext()
+    const {activeBoard, deleteList, addJob, jobs, updateList: updateListInContext} = useBoardsContext()
     const {user} = useAuthContext()
     const [jobsForList, setJobsForList] = useState<JobType[]>([])
 
@@ -28,6 +31,7 @@ const BoardList = ({list}: any) => {
         let input = (e.target as HTMLInputElement)
         setListName(input.value)
         await updateList(list.id, {name: input.value})
+        updateListInContext({id: list.id, name: input.value})
         console.log('save to firebase');
     }
 
@@ -66,16 +70,22 @@ const BoardList = ({list}: any) => {
                     />
                     <MenuList>
                         <MenuItem  onClick={focusNameInput}>
-                        Edit 
+                            <FaRegEdit />
+                            <Text ml="10px">
+                                Edit 
+                            </Text>
                         </MenuItem>
                         <MenuItem  onClick={deleteListHandler}>
-                        Delete
+                            <MdDeleteForever />
+                            <Text ml="10px">
+                                Delete
+                            </Text>
                         </MenuItem>
                     </MenuList>
                     </Menu>
             </HStack>
             <Stack px="10px">
-                <Button onClick={addJobHandler}>Add Job</Button>
+                <Button onClick={addJobHandler} mb="10px"><HiOutlinePlus /></Button>
             </Stack>
             <Stack px="10px" h="100px">
                 {jobsForList.map((job: any) => <JobCard job={job} key={job.id}/>)}
