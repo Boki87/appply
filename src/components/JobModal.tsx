@@ -1,11 +1,12 @@
 import {useState, SyntheticEvent, useRef, useEffect} from 'react'
-import {HStack, FormControl, FormLabel, Box, Text, Center, Spinner, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Input, Tabs, Tab, TabList, TabPanels, TabPanel, Textarea} from '@chakra-ui/react'
+import {HStack, FormControl, FormLabel, Box, Text, Center, Spinner, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Input, Tabs, Tab, TabList, TabPanels, TabPanel, Textarea, InputGroup, InputRightElement} from '@chakra-ui/react'
 import {useSearchParams, useLocation, useNavigate} from 'react-router-dom'
 import {fetchJobData} from '../lib/firebase'
 import {BsInfoCircle, BsSave} from 'react-icons/bs'
 import {CgNotes} from 'react-icons/cg'
 import {RiDeleteBinLine} from 'react-icons/ri'
 import {useBoardsContext} from '../context'
+import {IoMdOpen} from 'react-icons/io'
 
 type JobModalProps = {
     isOpen: boolean,
@@ -86,6 +87,13 @@ const JobModal = ({}) => {
         }
     }
 
+
+    function openLink(prop: string) {
+        if(!job || job?.[prop] == '' ) return
+        window.open(job[prop], '_blank')
+    }
+
+    
     useEffect(() => {
         if(job) {
             let date = new Date(job.deadline)
@@ -158,6 +166,30 @@ const JobModal = ({}) => {
                                                 <FormControl>
                                                     <FormLabel>Deadline</FormLabel>
                                                     <Input type="date" value={deadline} name="deadline" onInput={onDateChangeHandler}/>
+                                                </FormControl>
+                                            </HStack>
+                                            <HStack mb="10px">
+                                                <FormControl>
+                                                    <FormLabel>Post Url</FormLabel>
+                                                    <InputGroup>
+                                                        <Input type="text" value={job.url} name="url" onInput={onInputHandler}/>
+                                                        <InputRightElement w="4.5rem">
+                                                            <Button onClick={() => openLink('url')} size="sm" mr="-1.5rem">
+                                                                <IoMdOpen />
+                                                            </Button>
+                                                        </InputRightElement>
+                                                    </InputGroup>
+                                                </FormControl>
+                                                <FormControl>
+                                                    <FormLabel>Company Website</FormLabel>
+                                                    <InputGroup>
+                                                        <Input type="text" value={job.company_website} name="company_website" onInput={onInputHandler}/>
+                                                        <InputRightElement w="4.5rem">
+                                                            <Button onClick={ () => openLink('company_website')} size="sm" mr="-1.5rem">
+                                                                <IoMdOpen />
+                                                            </Button>
+                                                        </InputRightElement>
+                                                    </InputGroup>
                                                 </FormControl>
                                             </HStack>
                                             <FormControl>

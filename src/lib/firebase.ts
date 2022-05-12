@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, signOut, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-import {getFirestore, doc, addDoc, getDoc, collection, getDocs, deleteDoc, setDoc,query, where} from 'firebase/firestore'
-import {JobType} from '../context/board'
+import { getFirestore, doc, addDoc, getDoc, collection, getDocs, deleteDoc, setDoc, query, where } from 'firebase/firestore'
+import { JobType } from '../context/board'
 
 
 const firebaseConfig = {
@@ -33,7 +33,7 @@ const signIn = async (email: string, password: string) => {
 const signUp = async (email: string, password: string) => {
   try {
     //register user
-    let {user} = await createUserWithEmailAndPassword(auth, email, password)
+    let { user } = await createUserWithEmailAndPassword(auth, email, password)
 
     //add starter board to boards collection
     let today = new Date()
@@ -43,16 +43,16 @@ const signUp = async (email: string, password: string) => {
       created_at: +new Date()
     })
 
-   addStarterListsToBoard(board.id)
+    addStarterListsToBoard(board.id)
 
-  }catch(err) {
+  } catch (err) {
     console.log(err)
   }
 }
 
 function addStarterListsToBoard(boardId: string) {
-   //add starter lists to board
-   const initialLists = [
+  //add starter lists to board
+  const initialLists = [
     'Wishlist',
     'Applied',
     'Interview',
@@ -81,10 +81,10 @@ const addDocToCollection = async (collectionName: string, doc: any) => {
 const updateDoc = async (collectionName: string, docId: string, docObj: any) => {
   console.log(collectionName, docId, docObj)
   const docRef = doc(db, collectionName, docId)
-  await setDoc(docRef, docObj, {merge: true})
+  await setDoc(docRef, docObj, { merge: true })
   const docRes = await getDoc(docRef)
   const docResData = docRes.data()
-  return {id: docRes.id, ...docResData}
+  return { id: docRes.id, ...docResData }
 }
 
 
@@ -103,7 +103,7 @@ const getBoardsForUser = async (userId: string) => {
   const resArr: any = []
   querySnapshot.forEach(doc => {
     let d = doc.data()
-    resArr.push({id:doc.id,...d})
+    resArr.push({ id: doc.id, ...d })
   })
   return resArr
 }
@@ -133,18 +133,18 @@ const getListsForBoard = async (boardId: string | undefined) => {
   const resArr: any = []
   querySnapshot.forEach(doc => {
     let d = doc.data()
-    resArr.push({id:doc.id,...d})
+    resArr.push({ id: doc.id, ...d })
   })
-  resArr.sort((a:any,b:any) => a.order_id - b.order_id)
+  resArr.sort((a: any, b: any) => a.order_id - b.order_id)
   return resArr
 }
 
 const updateList = async (listId: string, listObj: any) => {
   const listRef = doc(db, 'lists', listId)
-  await setDoc(listRef, listObj, {merge: true})
+  await setDoc(listRef, listObj, { merge: true })
   const listRes = await getDoc(listRef)
   const listResData = listRes.data()
-  return {id: listRes.id, ...listResData}
+  return { id: listRes.id, ...listResData }
 }
 
 const deleteList = async (listId: string) => {
@@ -159,14 +159,14 @@ const createNewList = async (boardId: string | undefined, listObj: object) => {
   return list
 }
 
-const updateListsOrder = async ( lists: any[]) => {
+const updateListsOrder = async (lists: any[]) => {
   lists.forEach(async (list, i) => {
-    await updateList(list.id, {order_id: i})
+    await updateList(list.id, { order_id: i })
   })
 }
 
 //jobs functions
-const addJob = async ( boardId: string, listId: string, userId: string, orderId: number) => {
+const addJob = async (boardId: string, listId: string, userId: string, orderId: number) => {
   const job = await addDocToCollection('jobs', {
     list_id: listId,
     board_id: boardId,
@@ -178,6 +178,8 @@ const addJob = async ( boardId: string, listId: string, userId: string, orderId:
     location: '',
     color: '',
     notes: '',
+    url: '',
+    company_website: '',
     order_id: orderId,
     created_at: +new Date()
   })
@@ -190,9 +192,9 @@ const getJobsForBoard = async (boardId: string) => {
   const resArr: any = []
   querySnapshot.forEach(doc => {
     let d = doc.data()
-    resArr.push({id:doc.id,...d})
+    resArr.push({ id: doc.id, ...d })
   })
-  resArr.sort((a:any,b:any) => a.order_id - b.order_id)
+  resArr.sort((a: any, b: any) => a.order_id - b.order_id)
   return resArr
 }
 
@@ -211,9 +213,9 @@ const fetchJobData = async (jobId: string) => {
 
 const updateJob = async (jobId: string, jobObj: any) => {
   const jobRef = doc(db, 'jobs', jobId)
-  await setDoc(jobRef, jobObj, {merge: true})
+  await setDoc(jobRef, jobObj, { merge: true })
   const jobRes = await getDoc(jobRef)
-  return {id: jobRes.id, ...jobRes.data()}
+  return { id: jobRes.id, ...jobRes.data() }
 }
 
 const deleteJob = async (jobId: string) => {
