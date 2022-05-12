@@ -24,6 +24,9 @@ type BoardsContextType = {
   updateJob: (jobId: string, job: JobType) => void,
   deleteJob: (jobId: string) => void,
   updateJobPosition: (jobId: string, listSource: string, listDestination: string, destinationIndex: number) => void,
+  filter: string,
+  filteredJobs: JobType[],
+  setFilter: (val: string) => void
 }
 
 
@@ -72,6 +75,9 @@ const BoardsContext = createContext<BoardsContextType>({
   updateJob: () => { },
   deleteJob: () => { },
   updateJobPosition: () => { },
+  filter: '',
+  setFilter: () => { },
+  filteredJobs: []
 });
 
 export const useBoardsContext = () => useContext(BoardsContext);
@@ -83,6 +89,20 @@ const BoardContextProvider: FC = ({ children }) => {
   const [lists, setLists] = useState<any[]>([]);
   const [isLoadingBoards, setIsLoadingBoards] = useState(false);
   const [jobs, setJobs] = useState<any[]>([])
+  const [filteredJobs, setFilteredJobs] = useState<JobType[]>([])
+  const [filter, setFilter] = useState('')
+
+
+  useEffect(() => {
+
+    if (filter != '') {
+      let fJobs = jobs.filter(job => job.name.trim().toLowerCase().includes(filter.trim().toLowerCase()))
+      setFilteredJobs(fJobs)
+    } else {
+      setFilteredJobs(jobs)
+    }
+
+  }, [filter, jobs])
 
   const setBoardsHandler = (boardsArr: any[]) => {
     setBoards(boardsArr);
@@ -269,7 +289,7 @@ const BoardContextProvider: FC = ({ children }) => {
 
 
   return (
-    <BoardsContext.Provider value={{ boards, isLoadingBoards, activeBoard, lists, jobs, setBoards: setBoardsHandler, deleteBoard: deleteBoardHandler, setActiveBoard: setActiveBoardHandler, setLists: setListsHandler, setIsLoadingBoards, deleteList: deleteListHandler, createNewList: createNewListHandler, addJob: addJobHandler, setJobs, getJobsForBoard: getJobsForBoardHandler, updateList, updateJob: updateJobHandler, deleteJob: deleteJobHandler, updateJobPosition }}>{children}</BoardsContext.Provider>
+    <BoardsContext.Provider value={{ boards, isLoadingBoards, activeBoard, lists, jobs, setBoards: setBoardsHandler, deleteBoard: deleteBoardHandler, setActiveBoard: setActiveBoardHandler, setLists: setListsHandler, setIsLoadingBoards, deleteList: deleteListHandler, createNewList: createNewListHandler, addJob: addJobHandler, setJobs, getJobsForBoard: getJobsForBoardHandler, updateList, updateJob: updateJobHandler, deleteJob: deleteJobHandler, updateJobPosition, filter, setFilter, filteredJobs }}>{children}</BoardsContext.Provider>
   );
 };
 

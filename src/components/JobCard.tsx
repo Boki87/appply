@@ -28,7 +28,7 @@ const JobCard = ({ job }: JobCardProps) => {
       {(provided, snapshot) => {
         return (
 
-          <Box onClick={openJobModal} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} w="full" minH="100px" borderRadius="md" p="10px" bg={job.color !== '' ? job.color : 'gray.100'} border="1px" borderColor="transparent" cursor="pointer" _hover={{ borderColor: 'gray.300' }} display="flex">
+          <Box onClick={openJobModal} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} w="full" minH="100px" borderRadius="md" p="10px" bg={snapshot.isDragging ? 'blue.50' : job.color !== '' ? job.color : 'gray.100'} border="1px" borderColor="transparent" cursor="pointer" _hover={{ borderColor: 'gray.300' }} display="flex" shadow={snapshot.isDragging ? 'lg' : ''}>
             <Stack mr="15px">
               <Avatar size="sm" name={job.company} />
             </Stack>

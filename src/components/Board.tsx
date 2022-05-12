@@ -1,5 +1,5 @@
-import { Box, Stack, Button, Flex, HStack, Text, Skeleton } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { Box, Stack, Button, Flex, HStack, Text, Skeleton, InputGroup, Input, InputRightElement } from '@chakra-ui/react'
+import { useEffect, useState, SyntheticEvent } from 'react'
 import { useParams } from 'react-router-dom'
 import { getListsForBoard } from '../lib/firebase'
 import { useBoardsContext } from '../context'
@@ -7,12 +7,13 @@ import { BoardType } from '../context/board'
 import BoardList from './BoardList'
 import JobModal from './JobModal'
 import { CgList } from 'react-icons/cg'
+import { BsSearch } from 'react-icons/bs'
 import { DragDropContext } from 'react-beautiful-dnd'
 
 const Board = () => {
 
   let { id } = useParams()
-  const { lists, setLists, boards, createNewList, setActiveBoard, getJobsForBoard, updateJobPosition } = useBoardsContext()
+  const { lists, setLists, boards, createNewList, setActiveBoard, getJobsForBoard, updateJobPosition, setFilter } = useBoardsContext()
   const [board, setBoard] = useState<BoardType | null>(null)
   const [loadingLists, setLoadingLists] = useState(true)
 
@@ -51,6 +52,13 @@ const Board = () => {
   }
 
 
+  function filterJobHandler(e: SyntheticEvent) {
+    let input = e.target as HTMLInputElement
+    let value = input.value
+    setFilter(value)
+  }
+
+
   useEffect(() => {
     if (!id) {
       return
@@ -62,6 +70,10 @@ const Board = () => {
   return (<Box bg="gray.50" w="full" display="flex" flexDirection="column" overflow="hidden">
     <HStack h="50px" bg="white" px="20px" borderBottom="1px" borderColor="gray.300">
       <Text>{board && board.name}</Text>
+      <InputGroup w="300px" ml="10px">
+        <Input onInput={filterJobHandler} type="search" placeholder="Filter Jobs" />
+        <InputRightElement children={<BsSearch />} />
+      </InputGroup>
     </HStack>
     <Box w="full" flexGrow={1} overflowX="auto">
       <Box h="full">
