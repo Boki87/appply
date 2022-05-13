@@ -52,7 +52,6 @@ const BoardList = ({ list }: any) => {
     //console.log(newJob);
   }
 
-
   let jobsForList = filteredJobs.filter((job: any) => job.list_id === list.id)
 
 
@@ -100,8 +99,9 @@ const BoardList = ({ list }: any) => {
           (provided, snapshot) => {
             return (
 
-              <Stack px="10px" flexGrow="1" bg={snapshot.isDraggingOver ? 'gray.200' : ''} pt="10px" {...provided.droppableProps} ref={provided.innerRef}>
+              <Stack px="10px" flexGrow={1} bg={snapshot.isDraggingOver ? 'gray.200' : ''} pt="10px" {...provided.droppableProps} ref={provided.innerRef}>
                 {jobsForList.map((job: any) => <JobCard job={job} key={job.id} />)}
+              {provided.placeholder}
               </Stack>
             )
           }
