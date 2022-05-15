@@ -7,6 +7,7 @@ import { CgNotes } from 'react-icons/cg'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import { useBoardsContext } from '../context'
 import { IoMdOpen } from 'react-icons/io'
+import NotesEditor from './NotesEditor'
 
 type JobModalProps = {
   isOpen: boolean,
@@ -199,7 +200,7 @@ const JobModal = ({ }) => {
                     </Box>
                   </TabPanel>
                   <TabPanel>
-                    <Textarea value={job.notes} onInput={onInputHandler} name="notes" minH="350px" />
+                    <NotesEditor val={job.notes}/> 
                   </TabPanel>
                 </TabPanels>
               </Tabs>
