@@ -8,12 +8,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.1.0",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
     "@tiptap/react": "^2.0.0-beta.109",
     "@tiptap/starter-kit": "^2.0.0-beta.185",
+    "framer-motion": "^6.3.3",
     "javascript-time-ago": "^2.3.13",
-    "react": "^17.0.2",
+    "react": "^18.1.0",
     "react-beautiful-dnd": "^13.1.0",
-    "react-dom": "^17.0.2"
+    "react-dom": "^18.1.0",
+    "react-icons": "^4.3.1"
   },
   "devDependencies": {
     "@types/react": "^17.0.33",

@@ -10,7 +10,11 @@ import { JobType } from '../context/board'
 import JobCard from './JobCard'
 import { Droppable } from 'react-beautiful-dnd'
 
-const BoardList = ({ list }: any) => {
+import { ListProps } from '../context/board'
+
+
+
+const BoardList = ({ list }: { list: ListProps }) => {
 
   let inputRef = useRef<HTMLInputElement>(null)
   const [listName, setListName] = useState(list.name)
@@ -32,7 +36,7 @@ const BoardList = ({ list }: any) => {
     let input = (e.target as HTMLInputElement)
     setListName(input.value)
     await updateList(list.id, { name: input.value })
-    updateListInContext({ id: list.id, name: input.value })
+    updateListInContext({ id: list.id, name: input.value, order_id: list.order_id, board_id: list.board_id })
     console.log('save to firebase');
   }
 

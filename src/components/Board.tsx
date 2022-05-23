@@ -3,7 +3,7 @@ import { useEffect, useState, SyntheticEvent } from 'react'
 import { useParams } from 'react-router-dom'
 import { getListsForBoard } from '../lib/firebase'
 import { useBoardsContext } from '../context'
-import { BoardType } from '../context/board'
+import { BoardType, ListProps } from '../context/board'
 import BoardList from './BoardList'
 import JobModal from './JobModal'
 import { CgList } from 'react-icons/cg'
@@ -84,7 +84,7 @@ const Board = () => {
 
           {/* Map of all the lists in current board */}
           <DragDropContext onDragEnd={onDragEnd}>
-            {!loadingLists && lists && lists.map((list: any) => <BoardList list={list} key={list.id} />)}
+            {!loadingLists && lists && lists.map((list: ListProps) => <BoardList list={list} key={list.id} />)}
           </DragDropContext>
 
           {/* Add new list button */}

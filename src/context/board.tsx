@@ -2,13 +2,22 @@ import { useState, useContext, useEffect, createContext, FC } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { createNewList, updateListsOrder } from "../lib/firebase.js";
 import { deleteJob, deleteBoard, deleteList, addJob, getJobsForBoard, deleteJobsInList, updateJob } from "../lib/firebase.js";
-import { ListProps } from "@chakra-ui/react";
+// import { ListProps } from "@chakra-ui/react";
+
+
+export type ListProps = {
+  id: string,
+  order_id: number,
+  name: string,
+  board_id: string,
+}
+
 
 type BoardsContextType = {
   boards: any[],
   isLoadingBoards: boolean,
   activeBoard: BoardType | null,
-  lists: any[],
+  lists: ListProps[],
   setBoards: (boardsArr: any[]) => void,
   deleteBoard: (boardId: string) => void
   setActiveBoard: (activeBoard: BoardType) => void,

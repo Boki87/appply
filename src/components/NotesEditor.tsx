@@ -20,7 +20,7 @@ const EditorMenuBar = ({editor}: {editor: any}) => {
       <Button size="sm" type="button" variant={editor.isActive('horizontalrule') ? 'solid' : 'outline'} onClick={() => editor.chain().focus().setHorizontalRule().run()}><FaRulerHorizontal /></Button>
       <Button size="sm" type="button" variant={editor.isActive('bulletlist') ? 'solid' : 'outline'} onClick={() => editor.chain().focus().toggleBulletList().run()}><AiOutlineUnorderedList /></Button>
       <Button size="sm" type="button" variant={editor.isActive('orderedlist') ? 'solid' : 'outline'} onClick={() => editor.chain().focus().toggleOrderedList().run()}><AiOutlineOrderedList /></Button>
-      <Button size="sm" type="button" ariant={editor.isActive('paragraph') ? 'solid' : 'outline'} onClick={() => editor.chain().focus().setParagraph().run()}>p</Button>
+      <Button size="sm" type="button" variant={editor.isActive('paragraph') ? 'solid' : 'outline'} onClick={() => editor.chain().focus().setParagraph().run()}>p</Button>
       <Button size="sm" type="button" variant={editor.isActive('heading', { level: 1 }) ? 'solid' : 'outline'} onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}>h1</Button>
       <Button size="sm" type="button" variant={editor.isActive('heading', { level: 2 }) ? 'solid' : 'outline'} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>h2</Button>
       <Button size="sm" type="button" variant={editor.isActive('heading', { level: 3 }) ? 'solid' : 'outline'} onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}>h3</Button>

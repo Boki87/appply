@@ -154,7 +154,6 @@ const deleteList = async (listId: string) => {
 
 const createNewList = async (boardId: string | undefined, listObj: object) => {
   const listOrder = await getDocs(collection(db, 'lists'))
-  const orderId = listOrder.length
   const list = await addDocToCollection('lists', listObj)
   return list
 }
