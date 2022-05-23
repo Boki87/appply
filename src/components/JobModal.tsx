@@ -1,7 +1,7 @@
 import { useState, SyntheticEvent, useRef, useEffect } from 'react'
 import { HStack, FormControl, FormLabel, Box, Text, Center, Spinner, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Input, Tabs, Tab, TabList, TabPanels, TabPanel, Textarea, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { useSearchParams, useLocation, useNavigate } from 'react-router-dom'
-import { fetchJobData } from '../lib/firebase'
+import { fetchJobData, getJobsForBoard } from '../lib/firebase'
 import { BsInfoCircle, BsSave } from 'react-icons/bs'
 import { CgNotes } from 'react-icons/cg'
 import { RiDeleteBinLine } from 'react-icons/ri'
@@ -94,6 +94,9 @@ const JobModal = ({ }) => {
     window.open(job[prop], '_blank')
   }
 
+  function notesOnEditHandler(val: string) {
+    setJob({ ...job, notes: val })
+  }
 
   useEffect(() => {
     if (job) {
@@ -200,7 +203,7 @@ const JobModal = ({ }) => {
                     </Box>
                   </TabPanel>
                   <TabPanel>
-                    <NotesEditor val={job.notes}/> 
+                    <NotesEditor val={job.notes} updateHandler={notesOnEditHandler}/>
                   </TabPanel>
                 </TabPanels>
               </Tabs>

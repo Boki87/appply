@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {Box, Text, Button, HStack, Link, Flex} from '@chakra-ui/react'
+import {Image, Box, Text, Button, HStack, Link, Flex} from '@chakra-ui/react'
 import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom'
 import {BsPlus} from 'react-icons/bs'
 import {useBoardsContext, useAuthContext} from '../context'
@@ -28,9 +28,9 @@ const SideNav = () => {
 
     return (
         <Box minW="220px" borderRight='1px' borderColor='gray.200' display={{base: 'none', lg: 'flex'}} flexDirection="column">
-            <Box w="150px" h="150px" borderRadius="100%" bg='gray.300' mx='auto' my="20px" color="white" display="flex" alignItems="center" justifyContent="center" fontSize='2xl'>
-                    LOGO
-            </Box>
+                <Box display="flex" justifyContent="center" my="20px">
+                    <Image src="/assets/logo.png"  w="150px"/>
+                </Box>
 
             <Box p="4" display="flex" flexDirection="column" flexGrow={1}>
                 <HStack justifyContent="space-between" mb="2" px="2">
