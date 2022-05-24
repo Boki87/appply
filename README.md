@@ -1,4 +1,5 @@
-##APPPLY
+## APPPLY
+
 Trello-like job tracking tool
 
 User stories:
@@ -29,7 +30,7 @@ Tech stack:
 
 [DEMO](https://appply.netlify.app)
 
-###Screenshots
+### Screenshots
 
 1. Login
    ![login](screenshots/login.jpg)
